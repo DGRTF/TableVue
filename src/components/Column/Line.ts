@@ -1,9 +1,6 @@
 import { ControlObserverCoordinate } from '../VerticalBorder/VerticalBorder';
 import './Line.scss';
 
-export interface Lines {
-  GetElementArr(): void;
-}
 export interface LineObserverSelect {
   AddObserver(lineChange: LinesChange): void;
   DeleteObserver(lineChange: LinesChange): void;
@@ -14,7 +11,15 @@ export interface LinesChange {
   ChangeLine(): void;
 }
 
-export default class Line implements Lines, LinesChange, LineObserverSelect, ControlObserverCoordinate {
+export interface Lines {
+  GetElementArr(): HTMLElement[];
+}
+
+export interface LineContent extends Lines, LineObserverSelect, LinesChange, ControlObserverCoordinate {
+  GetElementArr(): HTMLElement[];
+}
+
+export default class Line implements LineContent {
   constructor(contentLineArr: HTMLElement[]) {
     this.contentLineArr = contentLineArr;
     this.Init();
@@ -120,7 +125,7 @@ export default class Line implements Lines, LinesChange, LineObserverSelect, Con
 
 
 
-  GetElementArr() {
+  GetElementArr(): HTMLElement[] {
     return this.containerContentLineArr.slice();
   }
 

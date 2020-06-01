@@ -166,7 +166,7 @@ export default class VerticalBorder implements ControlObservable, ControlMin, Co
 
   Notify() {
     if (this.observer !== null || this.observer !== undefined) {
-      this.observer.forEach((el) => {
+      this.observer.forEach((el,index) => {
         el.SetCoordinatePercent(this.setSelectValue);
       });
     }

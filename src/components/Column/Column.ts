@@ -1,15 +1,15 @@
 import './Column.scss';
 
-export interface Columns {
-  AddContent(elementHTML: HTMLElement): void;
-}
-
 export interface LeftWidth {
   ChangeWidthLeft(coordinatePercent: number): void;
 }
 
 export interface RightWidth {
   ChangeWidthRight(coordinatePercent: number): void;
+}
+
+export interface Columns extends LeftWidth, RightWidth{
+  AddContent(elementHTML: HTMLElement): void;
 }
 
 export default class Column implements Columns, RightWidth, LeftWidth {
@@ -23,8 +23,6 @@ export default class Column implements Columns, RightWidth, LeftWidth {
   private parentElement: HTMLElement;
 
   private column: HTMLElement;
-
-  // private content: HTMLElement;
 
   private coordinate: number;
 
@@ -44,7 +42,6 @@ export default class Column implements Columns, RightWidth, LeftWidth {
 
   private CreateElements() {
     this.column = document.createElement('div');
-    // this.header = document.createElement('div');
   }
 
   private AddClasses() {
@@ -53,15 +50,6 @@ export default class Column implements Columns, RightWidth, LeftWidth {
 
   private AddContentHTML() {
     this.parentElement.appendChild(this.column);
-    // const el = document.createElement('div');
-    // el.style.width = '80%';
-    // el.style.height = '80%';
-    // el.style.backgroundColor = 'blue';
-
-    // this.header.innerText = this.name;
-    // this.header.style.display = 'inline-block';
-    // this.column.appendChild(this.header);
-    // this.column.appendChild(el);
   }
 
   ChangeWidthLeft(coordinatePercent: number) {

@@ -1,32 +1,24 @@
 import { Columns } from './Column';
-import Line from './Line';
+import Line, { Lines, LineContent } from './Line';
 import LineHeader from './LineHeader';
-import VerticalBorder, { ControlObservable } from '../VerticalBorder/VerticalBorder';
+import VerticalBorder, { ControlObservable, ControlObserverCoordinate } from '../VerticalBorder/VerticalBorder';
+import CreatorLine from './CreatorLine';
 
 
-export default class LineFacade {
-  constructor(verticalBorder: ControlObservable[]) {
-    this.verticalBorder = verticalBorder;
+export default class LineControl {
+  constructor(lineArr: LineContent[], verticalBorderArr: ControlObservable[]) {
+    this.verticalBorderArr = verticalBorderArr;
+    this.lineArr = lineArr;
     this.Init();
   }
 
-  private verticalBorder: ControlObservable[];
+  private verticalBorderArr: ControlObservable[];
 
-  private lineArr: Line[];
-
-  private lineHeader: LineHeader;
+  private lineArr: LineContent[];
 
   private Init() {
-    this.AddObserverVerticalBorder();
     this.ToLinkLines();
-  }
-
-  private AddObserverVerticalBorder() {
-    this.verticalBorder.forEach(el => {
-      this.lineArr.forEach(el => {
-        el.AddObserver(el);
-      });
-    });
+    this.AddObserversInVerticalBorders();
   }
 
   private ToLinkLines() {
@@ -38,7 +30,19 @@ export default class LineFacade {
     })
   }
 
-  GetElementArr(index: number, item: number): HTMLElement {
-    return this.lineArr[item].GetElementArr()[index];
+  private AddObserversInVerticalBorders() {
+    this.verticalBorderArr.forEach(el => {
+      this.lineArr.forEach(element => {
+        el.AddObserver(element);
+      });
+    });
+  }
+
+  GetElementArr(): HTMLElement[] {
+    let contentLine: HTMLElement[] = [];
+    this.lineArr.forEach(el => {
+      contentLine = contentLine.concat(el.GetElementArr());
+    });
+    return contentLine.slice();
   }
 }
