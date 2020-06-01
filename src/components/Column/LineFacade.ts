@@ -1,8 +1,5 @@
-import { Columns } from './Column';
-import Line, { Lines, LineContent } from './Line';
-import LineHeader from './LineHeader';
-import VerticalBorder, { ControlObservable, ControlObserverCoordinate } from '../VerticalBorder/VerticalBorder';
-import CreatorLine from './CreatorLine';
+import { LineContent } from './Line';
+import { ControlObservable } from '../VerticalBorder/VerticalBorder';
 
 
 export default class LineControl {
@@ -16,14 +13,18 @@ export default class LineControl {
 
   private lineArr: LineContent[];
 
+  private addLineArr: LineContent[];
+
+  private selectLine: number;
+
   private Init() {
-    this.ToLinkLines();
+    this.ToLinkLines(this.lineArr);
     this.AddObserversInVerticalBorders();
   }
 
-  private ToLinkLines() {
-    this.lineArr.forEach((el, ind) => {
-      this.lineArr.forEach((element, index) => {
+  private ToLinkLines(lineArr: LineContent[]) {
+    lineArr.forEach((el, ind) => {
+      lineArr.forEach((element, index) => {
         if (ind !== index)
           el.AddObserver(element);
       });
@@ -44,5 +45,20 @@ export default class LineControl {
       contentLine = contentLine.concat(el.GetElementArr());
     });
     return contentLine.slice();
+  }
+
+  AddLines(lineArr: LineContent[]) {
+    this.addLineArr = lineArr;
+    this.ToLinkLines(this.addLineArr);
+    this.ToLinkLinesAddArr();
+  }
+
+  private ToLinkLinesAddArr() {
+    this.addLineArr.forEach((el, ind) => {
+      this.lineArr.forEach((element, index) => {
+        if (ind !== index)
+          el.AddObserver(element);
+      });
+    });
   }
 }

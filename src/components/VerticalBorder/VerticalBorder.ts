@@ -18,8 +18,13 @@ export interface ControlMax {
   SetMaxMargin(maxMargin: number): void;
 }
 
+export interface Borders extends ControlObservable, ControlMin, ControlMax{
+  SetCurrentMarginPercent(percent: number): void;
+  GetSetSelectValue(): number;
+}
 
-export default class VerticalBorder implements ControlObservable, ControlMin, ControlMax {
+
+export default class VerticalBorder implements Borders {
 
   constructor(parentElement: HTMLElement) {
     this.parentElement = parentElement;

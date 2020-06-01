@@ -3,7 +3,7 @@ import LineControl from './LineFacade';
 import { ControlObservable } from '../VerticalBorder/VerticalBorder';
 import LineHeader from './LineHeader';
 import { LineContent } from './Line';
-import CreatorLineContent from './CreatorLine';
+import CreatorLine from './CreatorLine';
 import ColumnControl from './ColumnFacade';
 
 export default class ColumnLineFacade {
@@ -20,7 +20,7 @@ export default class ColumnLineFacade {
 
   private contentArr: HTMLElement[];
 
-  private columnArr: Column[]=[];
+  private columnArr: Column[] = [];
 
   private parentElement: HTMLElement;
 
@@ -28,7 +28,7 @@ export default class ColumnLineFacade {
 
   private lineHeader: LineHeader;
 
-  private lineArr: LineContent[]=[];
+  private lineArr: LineContent[] = [];
 
   private count: number;
 
@@ -50,11 +50,11 @@ export default class ColumnLineFacade {
     const contentLineArr = this.contentArr.splice(0, this.count);
     this.lineHeader = new LineHeader(contentLineArr.slice());
 
-    this.columnArr.forEach((el,index)=>{
+    this.columnArr.forEach((el, index) => {
       el.AddContent(this.lineHeader.GetElementArr()[index]);
     });
 
-    const creatorLine = new CreatorLineContent();
+    const creatorLine = new CreatorLine();
     this.lineArr = creatorLine.FactoryMethod(this.count, this.contentArr.slice())
 
     const lineFacade = new LineControl(this.lineArr.slice(), this.verticalBorderArr.slice());
@@ -67,6 +67,10 @@ export default class ColumnLineFacade {
     this.verticalBorderArr.forEach(el => {
       el.AddObserver(this.lineHeader);
     })
+  }
+
+  UpdatePosition(){
+    this.columnArr[this.columnArr.length-1].ChangeWidthRight(1);
   }
 
 }
