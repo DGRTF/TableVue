@@ -51,6 +51,7 @@ export default class LineControl {
     this.addLineArr = lineArr;
     this.ToLinkLines(this.addLineArr);
     this.ToLinkLinesAddArr();
+    this.Concat();
   }
 
   private ToLinkLinesAddArr() {
@@ -61,4 +62,9 @@ export default class LineControl {
       });
     });
   }
+
+  private Concat() {
+    this.lineArr.concat(this.addLineArr);
+  }
+
 }

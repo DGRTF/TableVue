@@ -26,9 +26,7 @@ export default class ColumnControl {
   }
 
   private Create() {
-    console.warn(this.verticalBorderArr.length);
     for (let i = 0; i < this.verticalBorderArr.length; i++) {
-      console.warn(i);
       this.leftWidthMoveArr.push(new LeftWidthMove);
       this.rightWidthMoveArr.push(new RightWidthMove);
     }
@@ -55,7 +53,7 @@ export default class ColumnControl {
     this.columnArr.forEach((el, index) => {
       if (index > 0 && index < this.columnArr.length - 1) {
         this.verticalBorderArr[index].AddObserver(this.rightWidthMoveArr[index]);
-        this.verticalBorderArr[index - 1].AddObserver(this.leftWidthMoveArr[index-1]);
+        this.verticalBorderArr[index - 1].AddObserver(this.leftWidthMoveArr[index - 1]);
       }
     });
 
@@ -69,8 +67,13 @@ export default class ColumnControl {
       if (count === -1)
         count = this.columnArr.length - 1;
       this.columnArr[count].AddContent(el);
-      console.warn(count);
     });
+  }
+
+  DeleteContent() {
+    this.columnArr.forEach(el => {
+      el.DeleteContent();
+    })
   }
 
 }

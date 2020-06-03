@@ -8,15 +8,16 @@ export interface RightWidth {
   ChangeWidthRight(coordinatePercent: number): void;
 }
 
-export interface Columns extends LeftWidth, RightWidth{
+export interface Columns extends LeftWidth, RightWidth {
   AddContent(elementHTML: HTMLElement): void;
+  DeleteContent(): void;
 }
 
 export default class Column implements Columns, RightWidth, LeftWidth {
 
   constructor(parentElement: HTMLElement, name = '') {
     this.parentElement = parentElement;
-    this.name=name;
+    this.name = name;
     this.Init();
   }
 
@@ -69,8 +70,15 @@ export default class Column implements Columns, RightWidth, LeftWidth {
     }
   }
 
-  AddContent(elementHTML: HTMLElement){
+  AddContent(elementHTML: HTMLElement) {
     this.column.appendChild(elementHTML);
+  }
+
+  DeleteContent() {
+    while (this.column.childNodes.length > 1) {
+      const child = this.column.lastChild;
+      this.column.removeChild(child)
+    }
   }
 
 }

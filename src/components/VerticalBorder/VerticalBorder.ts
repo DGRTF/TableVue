@@ -48,6 +48,8 @@ export default class VerticalBorder implements Borders {
 
   private verticalBorder: HTMLElement;
 
+  private verticalBorderContent: HTMLElement;
+
   private setSelectValue: number;
 
   private observer: ControlObserverCoordinate[] = [];
@@ -61,13 +63,16 @@ export default class VerticalBorder implements Borders {
 
   private Create() {
     this.verticalBorder = document.createElement('div');
+    this.verticalBorderContent = document.createElement('div');
   }
 
   private AddClasses() {
-    this.verticalBorder.classList.add('verticalBorder');
+    this.verticalBorder.classList.add('vertical-border');
+    this.verticalBorderContent.classList.add('vertical-border__content');
   }
 
   private AddContentHtml() {
+    this.verticalBorder.appendChild(this.verticalBorderContent);
     this.parentElement.appendChild(this.verticalBorder);
   }
 
@@ -171,7 +176,7 @@ export default class VerticalBorder implements Borders {
 
   Notify() {
     if (this.observer !== null || this.observer !== undefined) {
-      this.observer.forEach((el,index) => {
+      this.observer.forEach(el => {
         el.SetCoordinatePercent(this.setSelectValue);
       });
     }

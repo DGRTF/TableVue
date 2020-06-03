@@ -30,6 +30,12 @@ export default class ColumnLineFacade {
 
   private lineArr: LineContent[] = [];
 
+  private contentLineArr: HTMLElement[] = [];
+
+  private lineFacade: LineControl;
+
+  private columnControl: ColumnControl;
+
   private count: number;
 
   private Init() {
@@ -57,10 +63,10 @@ export default class ColumnLineFacade {
     const creatorLine = new CreatorLine();
     this.lineArr = creatorLine.FactoryMethod(this.count, this.contentArr.slice())
 
-    const lineFacade = new LineControl(this.lineArr.slice(), this.verticalBorderArr.slice());
-    this.contentArr = lineFacade.GetElementArr();
-    const columnControl = new ColumnControl(this.columnArr.slice(), this.verticalBorderArr.slice());
-    columnControl.AddContentHTMLInColumn(this.contentArr);
+    this.lineFacade = new LineControl(this.lineArr.slice(), this.verticalBorderArr.slice());
+    this.contentLineArr = this.lineFacade.GetElementArr();
+    this.columnControl = new ColumnControl(this.columnArr.slice(), this.verticalBorderArr.slice());
+    this.columnControl.AddContentHTMLInColumn(this.contentLineArr);
   }
 
   private AddObserversInVerticalBorders() {
@@ -69,8 +75,25 @@ export default class ColumnLineFacade {
     })
   }
 
-  UpdatePosition(){
-    this.columnArr[this.columnArr.length-1].ChangeWidthRight(1);
+  UpdatePosition() {
+    this.columnArr[this.columnArr.length - 1].ChangeWidthRight(1);
+  }
+
+  NewContent(contentArr: HTMLElement[]) {
+    this.columnControl.DeleteContent();
+    console.warn('content delete');
+    this.contentArr = contentArr;
+    // console.Rea
+
+    console.warn(this.contentArr);
+
+    const creatorLine = new CreatorLine();
+    this.lineArr = creatorLine.FactoryMethod(this.count, this.contentArr.slice());
+
+    this.lineFacade = new LineControl(this.lineArr.slice(), this.verticalBorderArr.slice());
+    this.contentLineArr = this.lineFacade.GetElementArr();
+
+    this.columnControl.AddContentHTMLInColumn(this.contentLineArr.slice());
   }
 
 }

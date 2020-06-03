@@ -1,9 +1,5 @@
 import VerticalBorder from '@/components/VerticalBorder/VerticalBorder';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-
-import Column from '@/components/Column/Column';
-import Line from '@/components/Column/Line';
-import LineHeader from '@/components/Column/LineHeader';
 import ColumnLineFacade from '@/components/Column/ColumnLineFacade';
 import BordersControl from '@/components/VerticalBorder/BordersFacade';
 
@@ -16,14 +12,18 @@ export default class Table extends Vue {
 
   @Prop() private contentLineArr: HTMLElement[];
 
+  @Prop() private header: HTMLElement[];
+
   @Prop() private countColumn: number;
+
+  private firstLoad = false;
 
   private columnCount = 8;
 
   private currentElement: HTMLElement = null;
 
   private verticalBorderArr: VerticalBorder[] = [];
-  
+
   private size: number;
 
   private bordersControl: BordersControl;
@@ -37,6 +37,7 @@ export default class Table extends Vue {
   private Init(cont: HTMLElement[]) {
     this.Create(cont);
     this.IntervalCheckSize();
+    this.firstLoad = true;
   }
 
 
@@ -45,6 +46,8 @@ export default class Table extends Vue {
     for (let i = 0; i < this.columnCount - 1; i++) {
       this.verticalBorderArr.push(new VerticalBorder(this.currentElement));
     }
+
+    cont = this.header.concat(cont);
 
     this.bordersControl = new BordersControl(this.verticalBorderArr.slice());
     this.columnLineFacade = new ColumnLineFacade(this.bordersControl.GetVerticalBorderArr(), cont.slice(), this.currentElement);
@@ -63,7 +66,15 @@ export default class Table extends Vue {
 
   @Watch('contentLineArr')
   AddLines(contentLineArr: HTMLElement[]) {
-    this.Init(contentLineArr);
+    if (this.firstLoad)
+      this.NewLines(contentLineArr);
+    else
+      this.Init(contentLineArr);
+  }
+
+  private NewLines(contentLineArr: HTMLElement[]) {
+    this.columnLineFacade.NewContent(contentLineArr.slice());
+    this.bordersControl.UpdatePosition();
   }
 }
 

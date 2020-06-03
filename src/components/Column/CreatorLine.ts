@@ -7,16 +7,13 @@ export interface CreatorLineContent{
 export default class CreatorLine implements CreatorLineContent{
   FactoryMethod(count: number, contentArr: HTMLElement[]): LineContent[] {
     const lineArr: LineContent[] = [];
-    const contentLineArr: HTMLElement[] = []
-    contentArr.forEach((el, index) => {
-      contentLineArr.push(el);
-      if ((index + 1) % (count) == 0 && index !== 0) {
-        const line = new Line(contentLineArr.slice());
-        lineArr.push(line);
-        contentLineArr.length = 0;
-      }
-    });
-    console.warn(lineArr.slice());
+    let contentLineArr: HTMLElement[] = []
+
+    for (let i = 0; i < count; i++) {
+      contentLineArr = contentArr.splice(0, count);
+      const line = new Line(contentLineArr.slice());
+      lineArr.push(line);
+    }
     return lineArr.slice();
   }
 }
