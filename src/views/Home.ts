@@ -20,6 +20,14 @@ export default class Home extends Vue {
 
   private headerHTML: HTMLElement[] = [];
 
+  private reverseName = false;
+
+  private reverseSurname = false;
+
+  private reversePosition = false;
+
+  private reverseAddress = false;
+
   private header: string[] = [
     'Превью',
     'Имя',
@@ -72,12 +80,93 @@ export default class Home extends Vue {
     const headerHTML: HTMLElement[] = [];
     this.header.forEach(el => {
       const element = document.createElement('div');
+      element.classList.add('container-table__inner-element');
       element.innerText = el;
       headerHTML.push(element);
     });
 
+    headerHTML[1].addEventListener('click', this.SortByName.bind(this));
+    headerHTML[2].addEventListener('click', this.SortBySurname.bind(this));
+    headerHTML[5].addEventListener('click', this.SortByPosition.bind(this));
+    headerHTML[7].addEventListener('click', this.SortByAddress.bind(this));
     this.headerHTML = headerHTML;
     this.GetElements();
+  }
+
+  private SortByName() {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `Home/SortByName?reverse=${this.reverseName}`, false);
+    xhr.send();
+
+    if (xhr.status != 200) {
+      console.warn(xhr.status + ': ' + xhr.statusText);
+    } else {
+      this.change = JSON.parse(xhr.responseText);
+
+      if (this.reverseName)
+        this.reverseName = false;
+      else
+        this.reverseName = true;
+
+      this.ChangeContent();
+    }
+  }
+
+  private SortBySurname() {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `Home/SortBySurname?reverse=${this.reverseSurname}`, false);
+    xhr.send();
+
+    if (xhr.status != 200) {
+      console.warn(xhr.status + ': ' + xhr.statusText);
+    } else {
+      this.change = JSON.parse(xhr.responseText);
+
+      if (this.reverseSurname)
+        this.reverseSurname = false;
+      else
+        this.reverseSurname = true;
+
+      this.ChangeContent();
+    }
+  }
+
+  private SortByPosition() {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `Home/SortByPosition?reverse=${this.reversePosition}`, false);
+    xhr.send();
+
+    if (xhr.status != 200) {
+      console.warn(xhr.status + ': ' + xhr.statusText);
+    } else {
+      this.change = JSON.parse(xhr.responseText);
+
+      if (this.reversePosition)
+        this.reversePosition = false;
+      else
+        this.reversePosition = true;
+
+      this.ChangeContent();
+    }
+  }
+
+  private SortByAddress() {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `Home/SortByAddress?reverse=${this.reverseAddress}`, false);
+    xhr.send();
+
+    if (xhr.status != 200) {
+      console.warn(xhr.status + ': ' + xhr.statusText);
+    } else {
+      this.change = JSON.parse(xhr.responseText);
+
+      if (this.reverseAddress)
+        this.reverseAddress = false;
+      else
+        this.reverseAddress = true;
+
+      this.ChangeContent();
+    }
   }
 
   private GetElements() {
@@ -88,7 +177,6 @@ export default class Home extends Vue {
     if (xhr.status != 200) {
       console.warn(xhr.status + ': ' + xhr.statusText);
     } else {
-      console.warn(JSON.parse(xhr.responseText));
       this.change = JSON.parse(xhr.responseText);
       this.ChangeContent();
     }

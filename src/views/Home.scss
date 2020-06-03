@@ -1,5 +1,11 @@
 .container-table
 {
+  &__inner-element
+  {
+    height: 100%;
+    width: 100%;
+  }
+
   &__remote-work
   {
     width: 20px;
