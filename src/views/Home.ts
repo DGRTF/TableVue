@@ -1,16 +1,23 @@
 import { Component, Vue } from 'vue-property-decorator';
 import Table from './Table.vue';
+import CurrentTable from './Table';
+import FormChangeBD from './../components/FormChangeBD.vue';
 
 
 @Component({
   components: {
-    Table
+    Table,
+    FormChangeBD
   }
 })
 export default class Home extends Vue {
+  private table: HTMLElement;
+
   private inDataArr: HTMLElement[] = [];
 
   private count = 8;
+
+  private addEmployeePath = 'Home/AddEmployee';
 
   private date: Date;
 
@@ -67,6 +74,7 @@ export default class Home extends Vue {
   ];
 
   private change: {
+    id: number;
     name: string;
     surname: string;
     position: string;
@@ -178,6 +186,7 @@ export default class Home extends Vue {
       console.warn(xhr.status + ': ' + xhr.statusText);
     } else {
       this.change = JSON.parse(xhr.responseText);
+      console.warn(this.change);
       this.ChangeContent();
     }
   }
@@ -217,8 +226,6 @@ export default class Home extends Vue {
       elPosition.innerText = el.position;
       dataHTMLArr.push(elPosition);
 
-      // const elRemoteWork = document.createElement('div');
-      // elRemoteWork.innerText = `${el.remoteWork}`;
       this.CreateRemoteWorkHTMLElement(el.remoteWork);
       dataHTMLArr.push(this.remoteWork);
 
@@ -226,7 +233,7 @@ export default class Home extends Vue {
       elAddress.innerText = el.address;
       dataHTMLArr.push(elAddress);
 
-    })
+    });
     this.inDataArr = dataHTMLArr;
   }
 
@@ -246,6 +253,25 @@ export default class Home extends Vue {
       const trueRemoteWork = document.createElement('div');
       trueRemoteWork.classList.add('container-table__remote-work__true');
       this.remoteWork.appendChild(trueRemoteWork);
+    }
+  }
+
+  private DeleteEmployee() {
+    const number = (this.$refs.table as CurrentTable).selectLine;
+    console.warn(number + ' select line');
+    if (number >= 0) {
+      const id = this.change[number].id;
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', `Home/DeleteEmployee?id=${id}`, false);
+      xhr.send();
+
+      if (xhr.status != 200) {
+        console.warn(xhr.status + ': ' + xhr.statusText);
+      } else {
+        this.change = JSON.parse(xhr.responseText);
+        this.ChangeContent();
+      }
     }
   }
 

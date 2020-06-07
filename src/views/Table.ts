@@ -16,6 +16,8 @@ export default class Table extends Vue {
 
   @Prop() private countColumn: number;
 
+  selectLine: number;
+
   private firstLoad = false;
 
   private columnCount = 8;
@@ -40,8 +42,6 @@ export default class Table extends Vue {
     this.firstLoad = true;
   }
 
-
-
   Create(cont: HTMLElement[]) {
     for (let i = 0; i < this.columnCount - 1; i++) {
       this.verticalBorderArr.push(new VerticalBorder(this.currentElement));
@@ -51,6 +51,7 @@ export default class Table extends Vue {
 
     this.bordersControl = new BordersControl(this.verticalBorderArr.slice());
     this.columnLineFacade = new ColumnLineFacade(this.bordersControl.GetVerticalBorderArr(), cont.slice(), this.currentElement);
+    this.columnLineFacade.SetMethodGetSelectLine(this.SetSelectLine.bind(this));
     this.bordersControl.SetDefaultPosition();
   }
 
@@ -75,6 +76,11 @@ export default class Table extends Vue {
   private NewLines(contentLineArr: HTMLElement[]) {
     this.columnLineFacade.NewContent(contentLineArr.slice());
     this.bordersControl.UpdatePosition();
+    this.selectLine = -1;
+  }
+
+  private SetSelectLine(selectLine: number): void {
+    this.selectLine = selectLine;
   }
 }
 

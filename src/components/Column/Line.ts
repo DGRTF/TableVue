@@ -17,6 +17,7 @@ export interface Lines {
 
 export interface LineContent extends Lines, LineObserverSelect, LinesChange, ControlObserverCoordinate {
   GetElementArr(): HTMLElement[];
+  GetSelect(): boolean;
 }
 
 export default class Line implements LineContent {
@@ -153,6 +154,11 @@ export default class Line implements LineContent {
     this.linesChange.forEach(el => {
       el.ChangeLine();
     });
+  }
+
+
+  GetSelect(): boolean {
+    return this.select;
   }
 
 }

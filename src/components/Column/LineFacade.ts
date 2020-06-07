@@ -1,8 +1,8 @@
-import { LineContent } from './Line';
+import { LineContent, LinesChange } from './Line';
 import { ControlObservable } from '../VerticalBorder/VerticalBorder';
 
 
-export default class LineControl {
+export default class LineControl implements LinesChange {
   constructor(lineArr: LineContent[], verticalBorderArr: ControlObservable[]) {
     this.verticalBorderArr = verticalBorderArr;
     this.lineArr = lineArr;
@@ -17,6 +17,8 @@ export default class LineControl {
 
   private selectLine: number;
 
+  private methodGetSelectLine: (selectLine: number) => void;
+
   private Init() {
     this.ToLinkLines(this.lineArr);
     this.AddObserversInVerticalBorders();
@@ -24,11 +26,12 @@ export default class LineControl {
 
   private ToLinkLines(lineArr: LineContent[]) {
     lineArr.forEach((el, ind) => {
+      el.AddObserver(this);
       lineArr.forEach((element, index) => {
         if (ind !== index)
           el.AddObserver(element);
       });
-    })
+    });
   }
 
   private AddObserversInVerticalBorders() {
@@ -55,16 +58,27 @@ export default class LineControl {
   }
 
   private ToLinkLinesAddArr() {
-    this.addLineArr.forEach((el, ind) => {
-      this.lineArr.forEach((element, index) => {
-        if (ind !== index)
-          el.AddObserver(element);
+    this.addLineArr.forEach(el => {
+      this.lineArr.forEach(element => {
+        el.AddObserver(element);
       });
     });
   }
 
   private Concat() {
     this.lineArr.concat(this.addLineArr);
+  }
+
+  ChangeLine() {
+    this.lineArr.forEach((el, index) => {
+      if (el.GetSelect())
+        this.selectLine = index;
+    })
+    this.methodGetSelectLine(this.selectLine);
+  }
+
+  SetMethodGetSelectLine(methodGetSelectLine: (selectLine: number) => void) {
+    this.methodGetSelectLine = methodGetSelectLine;
   }
 
 }

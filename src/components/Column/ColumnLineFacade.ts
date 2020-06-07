@@ -38,6 +38,8 @@ export default class ColumnLineFacade {
 
   private count: number;
 
+  private methodSelectLine: (selectLine: number) => void;
+
   private Init() {
     this.count = this.verticalBorderArr.length + 1;
     this.CreateColumn();
@@ -81,19 +83,21 @@ export default class ColumnLineFacade {
 
   NewContent(contentArr: HTMLElement[]) {
     this.columnControl.DeleteContent();
-    console.warn('content delete');
     this.contentArr = contentArr;
-    // console.Rea
-
-    console.warn(this.contentArr);
 
     const creatorLine = new CreatorLine();
     this.lineArr = creatorLine.FactoryMethod(this.count, this.contentArr.slice());
 
     this.lineFacade = new LineControl(this.lineArr.slice(), this.verticalBorderArr.slice());
+    this.lineFacade.SetMethodGetSelectLine(this.methodSelectLine);
     this.contentLineArr = this.lineFacade.GetElementArr();
 
     this.columnControl.AddContentHTMLInColumn(this.contentLineArr.slice());
+  }
+
+  SetMethodGetSelectLine(methodGetSelectLine: (selectLine: number) => void) {
+    this.methodSelectLine = methodGetSelectLine;
+    this.lineFacade.SetMethodGetSelectLine(methodGetSelectLine);
   }
 
 }
