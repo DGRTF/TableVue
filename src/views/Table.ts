@@ -67,8 +67,10 @@ export default class Table extends Vue {
 
   @Watch('contentLineArr')
   AddLines(contentLineArr: HTMLElement[]) {
-    if (this.firstLoad)
+    if (this.firstLoad) {
       this.NewLines(contentLineArr);
+      console.warn('TwoLoad');
+    }
     else
       this.Init(contentLineArr);
   }
@@ -81,6 +83,7 @@ export default class Table extends Vue {
 
   private SetSelectLine(selectLine: number): void {
     this.selectLine = selectLine;
+    console.warn(this.selectLine);
   }
 }
 

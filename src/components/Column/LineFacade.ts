@@ -26,11 +26,11 @@ export default class LineControl implements LinesChange {
 
   private ToLinkLines(lineArr: LineContent[]) {
     lineArr.forEach((el, ind) => {
-      el.AddObserver(this);
       lineArr.forEach((element, index) => {
         if (ind !== index)
           el.AddObserver(element);
       });
+      el.AddObserver(this);
     });
   }
 
@@ -70,11 +70,22 @@ export default class LineControl implements LinesChange {
   }
 
   ChangeLine() {
+    let count = 0;
     this.lineArr.forEach((el, index) => {
-      if (el.GetSelect())
+      if (el.GetSelect()) {
         this.selectLine = index;
-    })
-    this.methodGetSelectLine(this.selectLine);
+        count++;
+        // console.warn(index);
+      }
+    });
+    // if (count > 1){
+    //   console.warn('count '+count);
+    //   this.ChangeLine();
+    //   console.warn('send');
+    // }
+    // else
+      this.methodGetSelectLine(this.selectLine);
+    // console.warn(this.selectLine);
   }
 
   SetMethodGetSelectLine(methodGetSelectLine: (selectLine: number) => void) {

@@ -13,11 +13,59 @@ import FormChangeBD from './../components/FormChangeBD.vue';
 export default class Home extends Vue {
   private table: HTMLElement;
 
+  private visibleAddEmployee = false;
+
+  private visibleEditEmployee = false;
+
+  private visibleTable = true;
+
+  private editEmployee: {
+    id: number;
+    name: string;
+    surname: string;
+    position: string;
+    preview: string;
+    address: string;
+    remoteWork: boolean;
+    birthDate: string;
+  } = {
+      id: 1,
+      name: 'Имя',
+      surname: 'Фамилия',
+      position: 'Должность',
+      preview: 'Фото',
+      address: 'Адрес',
+      remoteWork: false,
+      birthDate: '01.01.1980'
+    };
+
+  private addEmployee: {
+    id: number;
+    name: string;
+    surname: string;
+    position: string;
+    preview: string;
+    address: string;
+    remoteWork: boolean;
+    birthDate: string;
+  } = {
+      id: 1,
+      name: 'Имя',
+      surname: 'Фамилия',
+      position: 'Должность',
+      preview: 'Фото',
+      address: 'Адрес',
+      remoteWork: false,
+      birthDate: '01.01.1980'
+    };
+
   private inDataArr: HTMLElement[] = [];
 
   private count = 8;
 
   private addEmployeePath = 'Home/AddEmployee';
+
+  private editEmployeePath = 'Home/EditEmployee';
 
   private date: Date;
 
@@ -44,33 +92,6 @@ export default class Home extends Vue {
     'Должность',
     'Удалённая работа',
     'Адрес проживания'
-  ];
-
-  private columnNameArr: string[] = [
-    'Превью',
-    'Имя',
-    'Фамилия',
-    'Дата рождения',
-    'Возраст',
-    'Должность',
-    'Удалённая работа',
-    'Адрес проживания',
-    'Превью',
-    'Имя',
-    'Фамилия',
-    'Дата рождения',
-    'Возраст',
-    'Должность',
-    'Удалённая работа',
-    'Адрес проживания',
-    'Превью',
-    'Имя',
-    'Фамилия',
-    'Дата рождения',
-    'Возраст',
-    'Должность',
-    'Удалённая работа',
-    'Адрес проживания',
   ];
 
   private change: {
@@ -208,15 +229,14 @@ export default class Home extends Vue {
       dataHTMLArr.push(elSurname);
 
       const elBirthDate = document.createElement('div');
-      const birthDate = new Date(el.birthDate);
-      const birthDay = birthDate.getDay();
-      const birthMonth = birthDate.getMonth();
-      const birthYear = birthDate.getFullYear();
+      this.date = new Date(el.birthDate);
+      const birthDay = this.date.getDate();
+      const birthMonth = this.date.getMonth() + 1;
+      const birthYear = this.date.getFullYear();
       elBirthDate.innerText = `${birthDay}.${birthMonth}.${birthYear}`;
       dataHTMLArr.push(elBirthDate);
 
-      this.date = new Date(el.birthDate);
-      this.CreateDate();
+      this.CreateAgeYear();
 
       const elAge = document.createElement('div');
       elAge.innerText = `${this.year}`;
@@ -237,13 +257,16 @@ export default class Home extends Vue {
     this.inDataArr = dataHTMLArr;
   }
 
-  private CreateDate() {
+  private CreateAgeYear() {
     const currentDate = new Date();
     this.year = currentDate.getFullYear() - this.date.getFullYear() - 1;
+    console.warn(this.year);
     if (this.date.getMonth() <= currentDate.getMonth())
-      if (this.date.getMonth() <= currentDate.getMonth())
-        if (this.date.getDay() >= currentDate.getDay())
+      if (this.date.getMonth() === currentDate.getMonth()) {
+        if (this.date.getDate() <= currentDate.getDate())
           this.year += 1;
+      } else
+        this.year += 1;
   }
 
   private CreateRemoteWorkHTMLElement(remoteWork: boolean) {
@@ -272,6 +295,61 @@ export default class Home extends Vue {
         this.change = JSON.parse(xhr.responseText);
         this.ChangeContent();
       }
+    }
+  }
+
+  private EditEmployee() {
+    const number = (this.$refs.table as CurrentTable).selectLine;
+    console.warn(number + ' select line');
+    if (number >= 0) {
+      this.editEmployee = this.change[number];
+      this.visibleTable = false;
+      this.visibleEditEmployee = true;
+    }
+  }
+
+  private AddEmployee() {
+    this.visibleTable = false;
+    this.visibleAddEmployee = true;
+  }
+
+  private CloseAdd() {
+    this.visibleTable = true;
+    this.visibleAddEmployee = false;
+  }
+
+  private CloseEdit() {
+    this.visibleTable = true;
+    this.visibleEditEmployee = false;
+  }
+
+  private async SendAdd(formData: FormData) {
+    console.warn(formData);
+    const response = await fetch(`${this.addEmployeePath}`, {
+      method: 'POST',
+      body: formData,
+      // headers: {
+      //   'Content-Type': 'multipart/form-data'
+      // },
+    });
+
+    this.change = await response.json();
+    this.ChangeContent();
+  }
+
+  private async SendEdit(formData: FormData) {
+    const item = (this.$refs.table as CurrentTable).selectLine;
+    const id = this.change[item].id;
+    console.warn(formData);
+    if (item > 0) {
+      formData.append('id', `${id}`)
+      const response = await fetch(`${this.editEmployeePath}`, {
+        method: 'POST',
+        body: formData
+      });
+
+      this.change = await response.json();
+      this.ChangeContent();
     }
   }
 
