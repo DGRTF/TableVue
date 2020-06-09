@@ -327,10 +327,7 @@ export default class Home extends Vue {
     console.warn(formData);
     const response = await fetch(`${this.addEmployeePath}`, {
       method: 'POST',
-      body: formData,
-      // headers: {
-      //   'Content-Type': 'multipart/form-data'
-      // },
+      body: formData
     });
 
     this.change = await response.json();
@@ -339,10 +336,13 @@ export default class Home extends Vue {
 
   private async SendEdit(formData: FormData) {
     const item = (this.$refs.table as CurrentTable).selectLine;
+    console.warn(item+ ' item');
+    
     const id = this.change[item].id;
     console.warn(formData);
-    if (item > 0) {
-      formData.append('id', `${id}`)
+    if (item >= 0) {
+      formData.append('id', `${id}`);
+      console.warn(item+ ' item');
       const response = await fetch(`${this.editEmployeePath}`, {
         method: 'POST',
         body: formData
