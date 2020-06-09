@@ -30,7 +30,8 @@ export default class FormChangeBD extends Vue {
     const el = (event.target as HTMLFormElement);
     const img = el.files[0];
     const path = URL.createObjectURL(img);
-    (el.nextElementSibling as HTMLElement).style.backgroundImage = `url(${path})`;
+    (el.parentElement as HTMLElement).style.backgroundImage = `url(${path})`;
+    console.warn((el.nextElementSibling as HTMLElement));
   }
 
   private async SubmitForm(event: Event) {
