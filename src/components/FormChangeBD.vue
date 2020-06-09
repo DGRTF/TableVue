@@ -101,7 +101,7 @@
     min-width: 200px;
     background-color: rgba(207, 207, 207, 0.8);
     display: flex;
-    background-size: auto 200px;
+    background-size: cover;
   }
 }
 </style>
