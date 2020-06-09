@@ -83,7 +83,7 @@ export default class Table extends Vue {
 
   private SetSelectLine(selectLine: number): void {
     this.selectLine = selectLine;
-    console.warn(this.selectLine);
+    this.$emit('selectLine', this.selectLine);
   }
 }
 

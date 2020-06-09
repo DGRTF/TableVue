@@ -6,7 +6,7 @@
       button(v-on:click='DeleteEmployee')='Удалить'
       button(v-on:click='EditEmployee')='Редактировать'
       button(v-on:click='AddEmployee')='Добавить'
-    Table(ref='table' :header="headerHTML" :countColumn="count" :contentLineArr="inDataArr")
+    Table(ref='table' :header="headerHTML" :countColumn="count" :contentLineArr="inDataArr" v-on:selectLine='SelectLineInTable')
 </template>
 
 <style src='./Home.scss' lang='scss'></style>

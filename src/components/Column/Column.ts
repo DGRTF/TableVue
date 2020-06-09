@@ -53,6 +53,10 @@ export default class Column implements Columns, RightWidth, LeftWidth {
     this.parentElement.appendChild(this.column);
   }
 
+  private HeightParentElement(){
+    this.parentElement.style.height = `${this.column.offsetHeight}px`;
+  }
+
   ChangeWidthLeft(coordinatePercent: number) {
     if (coordinatePercent <= 1 && coordinatePercent >= 0) {
       this.left = this.parentElement.offsetWidth * coordinatePercent;
@@ -60,6 +64,7 @@ export default class Column implements Columns, RightWidth, LeftWidth {
       this.column.style.left = `${this.left}px`;
       this.column.style.width = `${this.column.offsetWidth + this.changeLeft}px`;
     }
+    this.HeightParentElement();
   }
 
   ChangeWidthRight(coordinatePercent: number) {
@@ -68,10 +73,12 @@ export default class Column implements Columns, RightWidth, LeftWidth {
       this.changeWidth = this.coordinate - this.column.getBoundingClientRect().left - this.column.offsetWidth;
       this.column.style.width = `${this.column.offsetWidth + this.changeWidth}px`;
     }
+    this.HeightParentElement();
   }
 
   AddContent(elementHTML: HTMLElement) {
     this.column.appendChild(elementHTML);
+    this.HeightParentElement();
   }
 
   DeleteContent() {
@@ -79,6 +86,7 @@ export default class Column implements Columns, RightWidth, LeftWidth {
       const child = this.column.lastChild;
       this.column.removeChild(child)
     }
+    this.HeightParentElement();
   }
 
 }

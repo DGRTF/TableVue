@@ -14,7 +14,10 @@ export default class FormChangeBD extends Vue {
     surname: string;
     position: string;
     preview: string;
-    address: string;
+    city: string;
+    street: string;
+    home: string;
+    flat: number;
     remoteWork: boolean;
     birthDate: string;
   };
@@ -33,26 +36,8 @@ export default class FormChangeBD extends Vue {
   private async SubmitForm(event: Event) {
     const form = (event.target as HTMLFormElement);
     const formData = new FormData(form);
-
-    const city = formData.get('city');
-    const street = formData.get('street');
-    const home = formData.get('home');
-    const flat = `${formData.get('flat')}`;
-
-    const address = `${city} ${street} д. ${home} кв. ${flat}`;
-
-    formData.delete('city');
-    formData.delete('street');
-    formData.delete('home');
-    formData.delete('flat');
-
-    formData.append('address', address);
-
     this.formData = formData;
-
     this.$emit('send', this.formData);
-
-    // console.warn(result);
   }
 
   private Close() {
@@ -72,5 +57,16 @@ export default class FormChangeBD extends Vue {
   }) {
     const labelImage = this.$refs.labelImage as HTMLElement;
     labelImage.style.backgroundImage = `url(${inTemplate.preview})`;
+    const checkbox = this.$refs.remoteWork as HTMLFormElement;
+    if (inTemplate.remoteWork)
+      checkbox.checked = true;
+    else
+      checkbox.checked = false;
   }
+
+  mounted(){
+    const labelImage = this.$refs.labelImage as HTMLElement;
+    labelImage.style.backgroundImage = 'url(/fileImg/DefaultEmployee.jpeg)';
+  }
+
 }

@@ -25,7 +25,10 @@ export default class Home extends Vue {
     surname: string;
     position: string;
     preview: string;
-    address: string;
+    city: string;
+    street: string;
+    home: string;
+    flat: number;
     remoteWork: boolean;
     birthDate: string;
   } = {
@@ -34,7 +37,10 @@ export default class Home extends Vue {
       surname: 'Фамилия',
       position: 'Должность',
       preview: 'Фото',
-      address: 'Адрес',
+      city: 'Город',
+      street: 'Улица',
+      home: 'Дом',
+      flat: 0,
       remoteWork: false,
       birthDate: '01.01.1980'
     };
@@ -45,7 +51,10 @@ export default class Home extends Vue {
     surname: string;
     position: string;
     preview: string;
-    address: string;
+    city: string;
+    street: string;
+    home: string;
+    flat: number;
     remoteWork: boolean;
     birthDate: string;
   } = {
@@ -53,8 +62,11 @@ export default class Home extends Vue {
       name: 'Имя',
       surname: 'Фамилия',
       position: 'Должность',
-      preview: 'Фото',
-      address: 'Адрес',
+      preview: '/fileImg/DefaultEmployee.jpeg',
+      city: 'Город',
+      street: 'Улица',
+      home: 'Дом',
+      flat: 0,
       remoteWork: false,
       birthDate: '01.01.1980'
     };
@@ -100,7 +112,10 @@ export default class Home extends Vue {
     surname: string;
     position: string;
     preview: string;
-    address: string;
+    city: string;
+    street: string;
+    home: string;
+    flat: number;
     remoteWork: boolean;
     birthDate: string;
   }[];
@@ -207,7 +222,6 @@ export default class Home extends Vue {
       console.warn(xhr.status + ': ' + xhr.statusText);
     } else {
       this.change = JSON.parse(xhr.responseText);
-      console.warn(this.change);
       this.ChangeContent();
     }
   }
@@ -250,7 +264,7 @@ export default class Home extends Vue {
       dataHTMLArr.push(this.remoteWork);
 
       const elAddress = document.createElement('div');
-      elAddress.innerText = el.address;
+      elAddress.innerText = `${el.city} ${el.street} д. ${el.home} кв. ${el.flat}`;
       dataHTMLArr.push(elAddress);
 
     });
@@ -260,7 +274,6 @@ export default class Home extends Vue {
   private CreateAgeYear() {
     const currentDate = new Date();
     this.year = currentDate.getFullYear() - this.date.getFullYear() - 1;
-    console.warn(this.year);
     if (this.date.getMonth() <= currentDate.getMonth())
       if (this.date.getMonth() === currentDate.getMonth()) {
         if (this.date.getDate() <= currentDate.getDate())
@@ -300,12 +313,12 @@ export default class Home extends Vue {
 
   private EditEmployee() {
     const number = (this.$refs.table as CurrentTable).selectLine;
-    console.warn(number + ' select line');
     if (number >= 0) {
       this.editEmployee = this.change[number];
       this.visibleTable = false;
       this.visibleEditEmployee = true;
-    }
+    } else
+      alert('Selected employee');
   }
 
   private AddEmployee() {
@@ -336,13 +349,10 @@ export default class Home extends Vue {
 
   private async SendEdit(formData: FormData) {
     const item = (this.$refs.table as CurrentTable).selectLine;
-    console.warn(item+ ' item');
-    
-    const id = this.change[item].id;
-    console.warn(formData);
     if (item >= 0) {
+      const id = this.change[item].id;
       formData.append('id', `${id}`);
-      console.warn(item+ ' item');
+
       const response = await fetch(`${this.editEmployeePath}`, {
         method: 'POST',
         body: formData
@@ -350,7 +360,15 @@ export default class Home extends Vue {
 
       this.change = await response.json();
       this.ChangeContent();
-    }
+    } else
+      alert('Selected employee');
+  }
+
+  private SelectLineInTable(selectLine: number) {
+    if (!this.visibleTable)
+      if (selectLine >= 0) {
+        this.editEmployee = this.change[selectLine];
+      }
   }
 
 }

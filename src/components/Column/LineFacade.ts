@@ -70,22 +70,12 @@ export default class LineControl implements LinesChange {
   }
 
   ChangeLine() {
-    let count = 0;
     this.lineArr.forEach((el, index) => {
       if (el.GetSelect()) {
         this.selectLine = index;
-        count++;
-        // console.warn(index);
       }
     });
-    // if (count > 1){
-    //   console.warn('count '+count);
-    //   this.ChangeLine();
-    //   console.warn('send');
-    // }
-    // else
       this.methodGetSelectLine(this.selectLine);
-    // console.warn(this.selectLine);
   }
 
   SetMethodGetSelectLine(methodGetSelectLine: (selectLine: number) => void) {

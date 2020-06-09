@@ -11,12 +11,12 @@
         input.form-redact__field(type='text' name='surname' placeholder='Фамилия' required :value='inTemplate.surname')
         input.form-redact__field(type='date' name='birthDate' placeholder='ММ/ДД/ГГГГ' required :value='inTemplate.birthDate')
         input.form-redact__field(type='text' name='position' placeholder='Должность' required :value='inTemplate.position')
-        input.form-redact__field(type='checkbox' name='remoteWork' value='true')
+        input.form-redact__field(type='checkbox' ref='remoteWork' name='remoteWork' value='true')
       .form-redact__column
-        input.form-redact__field(type='text' name='street' placeholder='Улица' required :value='inTemplate.name')
-        input.form-redact__field(type='text' name='home' placeholder='Дом' required :value='inTemplate.name')
-        input.form-redact__field(type='number' name='flat' placeholder='Квартира' required )
-        input.form-redact__field(type='text' name='city' placeholder='Город' required :value='inTemplate.name')
+        input.form-redact__field(type='text' name='street' placeholder='Улица' required :value='inTemplate.street')
+        input.form-redact__field(type='text' name='home' placeholder='Дом' required :value='inTemplate.home')
+        input.form-redact__field(type='number' name='flat' placeholder='Квартира' required :value='inTemplate.flat')
+        input.form-redact__field(type='text' name='city' placeholder='Город' required :value='inTemplate.city')
         input.form-redact__field(type='submit')
     
 </template>
@@ -27,6 +27,7 @@
   flex-direction: column;
   border: 1px solid black;
   box-sizing: border-box;
+  margin: 50px;
 
   &__header {
     height: 20px;
@@ -58,10 +59,9 @@
     border: 1px solid black;
     min-height: 200px;
     min-width: 200px;
-    background-color: red;
+    background-color: rgba(207, 207, 207, .8);
     display: flex;
     background-size: auto 200px;
-    // margin: 20px;
   }
 }
 </style>
