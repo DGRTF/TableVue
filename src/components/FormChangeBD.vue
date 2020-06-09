@@ -11,7 +11,8 @@
         input.form-redact__field(type='text' name='surname' placeholder='Фамилия' required :value='inTemplate.surname')
         input.form-redact__field(type='date' name='birthDate' placeholder='ММ/ДД/ГГГГ' required :value='inTemplate.birthDate')
         input.form-redact__field(type='text' name='position' placeholder='Должность' required :value='inTemplate.position')
-        input.form-redact__field(type='checkbox' ref='remoteWork' name='remoteWork' value='true')
+        label.form-redact__check-name='Удалёнка'
+          input.form-redact__check(type='checkbox' ref='remoteWork' name='remoteWork' value='true')
       .form-redact__column
         input.form-redact__field(type='text' name='street' placeholder='Улица' required :value='inTemplate.street')
         input.form-redact__field(type='text' name='home' placeholder='Дом' required :value='inTemplate.home')
@@ -82,6 +83,13 @@
     &:focus {
       outline: none;
     }
+  }
+
+  &__check-name{
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   &__preview {
