@@ -296,7 +296,6 @@ export default class Home extends Vue {
   }
 
   private async SendAdd(formData: FormData) {
-    console.warn(formData);
     const response = await fetch(`${this.addEmployeePath}`, {
       method: 'POST',
       body: formData
