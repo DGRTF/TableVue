@@ -138,92 +138,43 @@ export default class Home extends Vue {
   }
 
   private SortByName() {
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', `Home/SortByName?reverse=${this.reverseName}`, false);
-    xhr.send();
-
-    if (xhr.status != 200) {
-      console.warn(xhr.status + ': ' + xhr.statusText);
-    } else {
-      this.change = JSON.parse(xhr.responseText);
-
-      if (this.reverseName)
-        this.reverseName = false;
-      else
-        this.reverseName = true;
-
-      this.ChangeContent();
-    }
-  }
-
-  private SortBySurname() {
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', `Home/SortBySurname?reverse=${this.reverseSurname}`, false);
-    xhr.send();
-
-    if (xhr.status != 200) {
-      console.warn(xhr.status + ': ' + xhr.statusText);
-    } else {
-      this.change = JSON.parse(xhr.responseText);
-
+    const bool = this.Request(`Home/SortByName?reverse=${this.reverseName}`);
+    if (bool)
       if (this.reverseSurname)
         this.reverseSurname = false;
       else
         this.reverseSurname = true;
+  }
 
-      this.ChangeContent();
-    }
+  private SortBySurname() {
+    const bool = this.Request(`Home/SortBySurname?reverse=${this.reverseSurname}`);
+    if (bool)
+      if (this.reverseSurname)
+        this.reverseSurname = false;
+      else
+        this.reverseSurname = true;
   }
 
   private SortByPosition() {
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', `Home/SortByPosition?reverse=${this.reversePosition}`, false);
-    xhr.send();
-
-    if (xhr.status != 200) {
-      console.warn(xhr.status + ': ' + xhr.statusText);
-    } else {
-      this.change = JSON.parse(xhr.responseText);
-
+    const bool = this.Request(`Home/SortByPosition?reverse=${this.reversePosition}`);
+    if (bool)
       if (this.reversePosition)
         this.reversePosition = false;
       else
         this.reversePosition = true;
-
-      this.ChangeContent();
-    }
   }
 
   private SortByAddress() {
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', `Home/SortByAddress?reverse=${this.reverseAddress}`, false);
-    xhr.send();
-
-    if (xhr.status != 200) {
-      console.warn(xhr.status + ': ' + xhr.statusText);
-    } else {
-      this.change = JSON.parse(xhr.responseText);
-
+    const bool = this.Request(`Home/SortByAddress?reverse=${this.reverseAddress}`);
+    if (bool)
       if (this.reverseAddress)
         this.reverseAddress = false;
       else
         this.reverseAddress = true;
-
-      this.ChangeContent();
-    }
   }
 
   private GetElements() {
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'Home/Index', false);
-    xhr.send();
-
-    if (xhr.status != 200) {
-      console.warn(xhr.status + ': ' + xhr.statusText);
-    } else {
-      this.change = JSON.parse(xhr.responseText);
-      this.ChangeContent();
-    }
+    this.Request('Home/Index');
   }
 
   private ChangeContent() {
@@ -294,20 +245,28 @@ export default class Home extends Vue {
 
   private DeleteEmployee() {
     const number = (this.$refs.table as CurrentTable).selectLine;
-    console.warn(number + ' select line');
     if (number >= 0) {
-      const id = this.change[number].id;
-
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', `Home/DeleteEmployee?id=${id}`, false);
-      xhr.send();
-
-      if (xhr.status != 200) {
-        console.warn(xhr.status + ': ' + xhr.statusText);
-      } else {
-        this.change = JSON.parse(xhr.responseText);
-        this.ChangeContent();
+      const result = confirm("Delete employee from DB?");
+      if (result) {
+        const id = this.change[number].id;
+        this.Request(`Home/DeleteEmployee?id=${id}`);
       }
+    } else
+      alert('Selected employee');
+  }
+
+  private Request(path: string): boolean {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', path, false);
+    xhr.send();
+
+    if (xhr.status != 200) {
+      console.warn(xhr.status + ': ' + xhr.statusText);
+      return false;
+    } else {
+      this.change = JSON.parse(xhr.responseText);
+      this.ChangeContent();
+      return true;
     }
   }
 
