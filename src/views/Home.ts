@@ -93,8 +93,6 @@ export default class Home extends Vue {
 
   private reversePosition = false;
 
-  private reverseAddress = false;
-
   private header: string[] = [
     'Превью',
     'Имя',
@@ -132,7 +130,6 @@ export default class Home extends Vue {
     headerHTML[1].addEventListener('click', this.SortByName.bind(this));
     headerHTML[2].addEventListener('click', this.SortBySurname.bind(this));
     headerHTML[5].addEventListener('click', this.SortByPosition.bind(this));
-    headerHTML[7].addEventListener('click', this.SortByAddress.bind(this));
     this.headerHTML = headerHTML;
     this.GetElements();
   }
@@ -140,37 +137,19 @@ export default class Home extends Vue {
   private SortByName() {
     const bool = this.Request(`Home/SortByName?reverse=${this.reverseName}`);
     if (bool)
-      if (this.reverseSurname)
-        this.reverseSurname = false;
-      else
-        this.reverseSurname = true;
+      this.reverseName = !this.reverseName;
   }
 
   private SortBySurname() {
     const bool = this.Request(`Home/SortBySurname?reverse=${this.reverseSurname}`);
     if (bool)
-      if (this.reverseSurname)
-        this.reverseSurname = false;
-      else
-        this.reverseSurname = true;
+      this.reverseSurname = !this.reverseSurname;
   }
 
   private SortByPosition() {
     const bool = this.Request(`Home/SortByPosition?reverse=${this.reversePosition}`);
     if (bool)
-      if (this.reversePosition)
-        this.reversePosition = false;
-      else
-        this.reversePosition = true;
-  }
-
-  private SortByAddress() {
-    const bool = this.Request(`Home/SortByAddress?reverse=${this.reverseAddress}`);
-    if (bool)
-      if (this.reverseAddress)
-        this.reverseAddress = false;
-      else
-        this.reverseAddress = true;
+      this.reversePosition = !this.reversePosition;
   }
 
   private GetElements() {
